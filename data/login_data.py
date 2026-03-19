@@ -1,7 +1,7 @@
 import os
 
 
-class LoginDataLoginPage:
+class Login:
     STANDARD_USER = os.getenv("STANDARD_USER")
     LOCKED_OUT_USER = os.getenv("LOCKED_OUT_USER") # заблокированный пользователь, сообщение "BLOCKED_USER"
     PROBLEM_USER = os.getenv("PROBLEM_USER")
@@ -12,13 +12,13 @@ class LoginDataLoginPage:
     EMPTY = os.getenv("EMPTY")
 
 
-class PasswordDataLoginPage:
+class Password:
     SECRET_SAUCE = os.getenv("SECRET_SAUCE")
     INVALID_PASSWORD = os.getenv("INVALID_PASSWORD")
     EMPTY = os.getenv("EMPTY")
 
 
-class ErrorMessagesLoginPage:
+class ErrorMessages:
     EMPTY_USERNAME = "Epic sadface: Username is required"
     EMPTY_PASSWORD = "Epic sadface: Password is required"
     INCORRECT_DATA = "Epic sadface: Username and password do not match any user in this service"

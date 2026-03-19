@@ -1,5 +1,5 @@
 from pages.base_page import BasePage
 
 
-class CheckoutOverviewPage(BasePage):
+class CheckoutInfoPage(BasePage):
     pass
