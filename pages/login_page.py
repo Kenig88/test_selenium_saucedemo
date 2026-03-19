@@ -16,7 +16,7 @@ class LoginPage(BasePage):
     ERROR_MESSAGE = (By.XPATH, "//h3[@data-test='error']")
 
     # методы
-    def is_opened_login_page(self):
+    def is_opened(self):
         assert self.wait.until(EC.url_to_be(Links.LOGIN_PAGE))
 
     def enter_username(self, username: str) -> None:
