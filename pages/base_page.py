@@ -12,12 +12,14 @@ class BasePage:
         self.url = url
         self.wait = WebDriverWait(driver, timeout=10)
 
+    # для открытия первой страницы (LoginPage)
     def open(self) -> None:
         with allure.step(f"Открыть страницу: '{self.url}'."):
             self.driver.get(self.url)
 
+    # проверка что страница открыта
     def assert_page_opened(self, url_part: str, title_page: Locator = None) -> str:
-        with (allure.step(f" Проверка страницы: URL содержит '{url_part}', элемент '{title_page}' видим.")):
+        with allure.step(f" Проверка страницы: URL содержит '{url_part}', элемент '{title_page}' видим."):
             element = self.wait.until(EC.visibility_of_element_located(title_page))
             current_url = self.driver.current_url
             assert url_part in current_url, \
@@ -37,7 +39,7 @@ class BasePage:
                 element.clear()
             element.send_keys(text)
 
-    # получить текст
+    # получить текст из локатора
     def get_text(self, locator: Locator) -> str:
         with allure.step(f"Получить текст из '{locator}'."):
             element = self.wait.until(EC.visibility_of_element_located(locator))
@@ -45,7 +47,7 @@ class BasePage:
             return text if text else element.get_attribute(
                 'value')  # Иногда .text может вернуть пустую строку (особенно если текст в value/input)
 
-    # для ProductsPage и для других страниц если нужно что-то посчитать
+    # для ProductsPage и для других страниц если нужно посчитать локаторы
     def get_elements_count(self, locator: Locator) -> int:
         with allure.step(f"Количество элементов в '{locator}'."):
             elements = self.wait.until(EC.visibility_of_all_elements_located(locator))

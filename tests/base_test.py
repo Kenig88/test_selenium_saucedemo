@@ -20,7 +20,7 @@ class BaseTest:
     @pytest.fixture(autouse=True)
     def setup_pages(self, browser_fixture):
         self.login_page = LoginPage(browser_fixture)
-        # self.products_page = ProductsPage(browser_fixture)
+        self.products_page = ProductsPage(browser_fixture)
         # self.cart_page = CartPage(browser_fixture)
         # self.checkout_info_page = CheckoutInfoPage(browser_fixture)
         # self.checkout_overview_page = CheckoutOverviewPage(browser_fixture)
