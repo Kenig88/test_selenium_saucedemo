@@ -8,6 +8,8 @@ import pytest
 def test_checkout_flow(
         login,
         products_page,
+        cart_page,
+
         # добавляй по мере создания страниц
 ):
     sleep(1)
@@ -24,5 +26,6 @@ def test_checkout_flow(
     sleep(1)
 
     # cart_page
+    sleep(1)
 
 

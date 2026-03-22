@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+
 load_dotenv()  # Обычно load_dotenv() кладут не в data-файл, а в: 👉 conftest.py Так он выполняется один раз перед всеми тестами.
 
 from pages.login_page import LoginPage
@@ -53,24 +54,24 @@ def products_page(browser_fixture):
     return ProductsPage(browser_fixture)
 
 
-# @pytest.fixture()
-# def cart_page(browser_fixture):
-#     return CartPage(browser_fixture)
-#
-#
-# @pytest.fixture()
-# def checkout_info_page(browser_fixture):
-#     return CheckoutInfoPage(browser_fixture)
-#
-#
-# @pytest.fixture()
-# def checkout_overview_page(browser_fixture):
-#     return CheckoutOverviewPage(browser_fixture)
-#
-#
-# @pytest.fixture()
-# def checkout_complete_page(browser_fixture):
-#     return CheckoutCompletePage(browser_fixture)
+@pytest.fixture()
+def cart_page(browser_fixture):
+    return CartPage(browser_fixture)
+
+
+@pytest.fixture()
+def checkout_info_page(browser_fixture):
+    return CheckoutInfoPage(browser_fixture)
+
+
+@pytest.fixture()
+def checkout_overview_page(browser_fixture):
+    return CheckoutOverviewPage(browser_fixture)
+
+
+@pytest.fixture()
+def checkout_complete_page(browser_fixture):
+    return CheckoutCompletePage(browser_fixture)
 
 
 # фикстура логина
