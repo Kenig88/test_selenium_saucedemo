@@ -45,12 +45,10 @@ class TestProductsPage:
         prices = opened_products_page_after_login.get_prices()
         assert prices == sorted(prices, reverse=reverse)
 
-
-    # игнорируется, не доделан
-    @pytest.mark.skipif
     @allure.story("Навигация")
     @allure.title("Пользователь может открыть карточку товара")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_user_can_open_product_details(self, opened_products_page_after_login, product_details_page, product_name):
-        opened_products_page_after_login.open_product_details(product_name)
+    def test_user_can_open_product_details(self, opened_products_page_after_login, product_details_page):
+        opened_products_page_after_login.open_product_details(ProductNames.BACKPACK)
         assert product_details_page.is_opened()
+        assert product_details_page.get_product_title() == ProductNames.BACKPACK
