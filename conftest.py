@@ -72,9 +72,9 @@ def products_page(browser_fixture):
 
 
 # Возвращает PageObject страницы деталей товара
-# @pytest.fixture()
-# def product_details_page(browser_fixture):
-#     return ProductDetailsPage()
+@pytest.fixture()
+def product_details_page(browser_fixture):
+    return ProductDetailsPage(browser_fixture)
 
 
 # Возвращает PageObject страницы корзины
