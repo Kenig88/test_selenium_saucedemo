@@ -14,7 +14,7 @@ class TestLoginPage:
     def test_user_can_login_with_valid_credentials(self, login_page, products_page):
         login_page.open()
         login_page.user_input(Username.STANDARD_USER, Password.SECRET_SAUCE)
-        assert products_page.is_opened(), "Страница Products page не открылась"
+        assert products_page.is_opened() == "Products", "Страница ProductsPage не открылась"
 
     @allure.story("Валидация формы")
     @allure.title("Пользователь видит ошибки при пустых обязательных полях")

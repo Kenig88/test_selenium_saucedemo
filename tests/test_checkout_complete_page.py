@@ -18,4 +18,4 @@ class TestCheckoutCompletePage:
         assert opened_checkout_complete_page.get_complete_header_text() == CheckoutCompleteMessages.HEADER
         assert opened_checkout_complete_page.get_complete_text() == CheckoutCompleteMessages.TEXT
         opened_checkout_complete_page.click_home_button()
-        assert products_page.is_opened()
+        assert products_page.is_opened() == "Products", "Страница ProductsPage не открылась"

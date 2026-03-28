@@ -18,7 +18,7 @@ class TestCheckoutInfoPage:
             postal_code=CheckoutInfoData.POSTAL_CODE
         )
         opened_checkout_info_page.click_continue_button()
-        assert checkout_overview_page.is_opened()
+        assert checkout_overview_page.is_opened() == "Checkout: Overview", "Страница CheckoutOverviewPage не открылась"
 
     @allure.story("Валидация обязательных полей")
     @allure.title("Пользователь видит ошибки при пустых обязательных полях")
@@ -73,4 +73,4 @@ class TestCheckoutInfoPage:
     @allure.severity(allure.severity_level.NORMAL)
     def test_user_can_cancel_checkout(self, opened_checkout_info_page, cart_page):
         opened_checkout_info_page.click_cancel_button()
-        assert cart_page.is_opened()
+        assert cart_page.is_opened() == "Your Cart", "Страница CartPage не открылась"

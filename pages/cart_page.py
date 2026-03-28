@@ -39,10 +39,7 @@ class CartPage(BasePage):
         return self.get_elements_count(self.CART_ITEM)
 
     def get_product_names(self) -> list[str]:
-        return [
-            element.text
-            for element in self.find_all(self.PRODUCT_NAME)
-        ]
+        return [element.text for element in self.find_all(self.PRODUCT_NAME)]
 
     def is_product_in_cart(self, product_name: str) -> bool:
         return product_name in self.get_product_names()

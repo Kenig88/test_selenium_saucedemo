@@ -24,6 +24,3 @@ class CheckoutOverviewPage(BasePage):
 
     def get_products_count(self) -> int:
         return self.get_elements_count(self.CART_ITEM)
-
-    def has_any_product(self) -> bool:
-        return self.get_products_count() > 0

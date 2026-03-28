@@ -107,7 +107,7 @@ def checkout_complete_page(browser_fixture):
 
 # Выполняет логин пользователя
 @pytest.fixture()
-def opened_products_page_after_login(login_page, products_page):
+def logged_in_products_page(login_page, products_page):
     login_page.open()
     login_page.user_input(username=Username.STANDARD_USER, password=Password.SECRET_SAUCE)
     return products_page
@@ -116,10 +116,10 @@ def opened_products_page_after_login(login_page, products_page):
 # отдельная фикстура только для корзины для проверки test_cart_page.py
 # Открывает корзину с добавленным товаром
 @pytest.fixture()
-def product_in_cart_product_name(opened_products_page_after_login, cart_page):
+def cart_page_with_product(logged_in_products_page, cart_page):
     def _open(product_name):
-        opened_products_page_after_login.add_to_cart(product_name)
-        opened_products_page_after_login.click_open_cart()
+        logged_in_products_page.add_to_cart(product_name)
+        logged_in_products_page.click_open_cart()
         return cart_page
 
     return _open
@@ -127,9 +127,9 @@ def product_in_cart_product_name(opened_products_page_after_login, cart_page):
 
 # Открывает checkout step one (после корзины с дефолтным товаром)
 @pytest.fixture()
-def opened_checkout_info_page(opened_products_page_after_login, cart_page, checkout_info_page):
-    opened_products_page_after_login.add_to_cart(ProductNames.BACKPACK)
-    opened_products_page_after_login.click_open_cart()
+def opened_checkout_info_page(logged_in_products_page, cart_page, checkout_info_page):
+    logged_in_products_page.add_to_cart(ProductNames.BACKPACK)
+    logged_in_products_page.click_open_cart()
     cart_page.click_checkout()
     return checkout_info_page
 

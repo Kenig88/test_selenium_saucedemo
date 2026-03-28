@@ -12,22 +12,28 @@ from data.checkout_data import CheckoutInfoData, CheckoutCompleteMessages
 def test_checkout_flow(
         logged_in_products_page,
         products_page,
+        product_details_page,
         cart_page,
         checkout_info_page,
         checkout_overview_page,
         checkout_complete_page
 ):
-    product_name = ProductNames.BACKPACK
+    product_name = ProductNames.RED_TSHIRT
 
     with allure.step("Открыта Products page"):
         assert products_page.is_opened() == "Products", "Страница ProductsPage не открылась"
 
-    with allure.step("Пользователь добавляет товар в корзину"):
-        products_page.add_to_cart(product_name)
-        assert products_page.get_cart_count() == 1
+    with allure.step("Пользователь открывает страницу деталей товара"):
+        products_page.open_product_details(product_name)
+        assert product_details_page.is_opened(), "Страница ProductDetailsPage не открылась"
+        assert product_details_page.get_product_name() == product_name
+
+    with allure.step("Пользователь добавляет товар в корзину со страницы деталей"):
+        product_details_page.add_to_cart()
+        assert product_details_page.get_cart_count() == 1
 
     with allure.step("Пользователь переходит в корзину"):
-        products_page.click_open_cart()
+        product_details_page.click_open_cart()
         assert cart_page.is_opened() == "Your Cart", "Страница CartPage не открылась"
         assert cart_page.get_products_count() == 1
         assert cart_page.is_product_in_cart(product_name)
