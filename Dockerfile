@@ -3,6 +3,7 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
     DEBIAN_FRONTEND=noninteractive \
     CHROME_BIN=/usr/bin/chromium \
     CHROMEDRIVER_PATH=/usr/bin/chromedriver
@@ -27,9 +28,9 @@ WORKDIR /usr/workspace
 
 COPY requirements.txt .
 
-RUN python -m pip install --upgrade pip \
-    && python -m pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt
 
 COPY . .
 
-CMD ["pytest", "-sv", "-n", "auto", "--alluredir=allure-results", "--clean-alluredir"]
+CMD ["pytest", "-sv", "-n", "2", "--alluredir=allure-results", "--clean-alluredir"]

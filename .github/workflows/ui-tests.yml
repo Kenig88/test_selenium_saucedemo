@@ -15,7 +15,7 @@ on:
       workers:
         description: "xdist workers count"
         required: true
-        default: "auto"
+        default: "2"
         type: choice
         options:
           - auto
