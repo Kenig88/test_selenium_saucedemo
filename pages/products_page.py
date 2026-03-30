@@ -18,24 +18,23 @@ class ProductsPage(BasePage):
     def is_opened(self) -> str:
         return self.assert_page_opened("inventory", self.TITLE)
 
-    def _get_product_card(self, product_name: str):
+    def add_to_cart(self, product_name: str) -> None:
         locator = (
             By.XPATH,
             f"//div[contains(@class, 'inventory_item')]"
             f"[.//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']]"
+            f"//button"
         )
-        return self.find(locator)
-
-    def _click_product_button(self, product_name: str) -> None:
-        product_card = self._get_product_card(product_name)
-        button = product_card.find_element(By.TAG_NAME, "button")
-        button.click()
-
-    def add_to_cart(self, product_name: str) -> None:
-        self._click_product_button(product_name)
+        self.click(locator)
 
     def remove_from_cart(self, product_name: str) -> None:
-        self._click_product_button(product_name)
+        locator = (
+            By.XPATH,
+            f"//div[contains(@class, 'inventory_item')]"
+            f"[.//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']]"
+            f"//button"
+        )
+        self.click(locator)
 
     def open_product_details(self, product_name: str) -> None:
         locator = (

@@ -16,18 +16,14 @@ class CartPage(BasePage):
     def is_opened(self) -> str:
         return self.assert_page_opened("cart", self.TITLE)
 
-    def _get_cart_item(self, product_name: str):
-        locator = (
+    def remove_from_cart(self, product_name: str) -> None:
+        remove_button = (
             By.XPATH,
             f"//div[contains(@class, 'cart_item')]"
             f"[.//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']]"
+            f"//button"
         )
-        return self.find(locator)
-
-    def remove_from_cart(self, product_name: str) -> None:
-        cart_item = self._get_cart_item(product_name)
-        button = cart_item.find_element(By.TAG_NAME, "button")
-        button.click()
+        self.click(remove_button)
 
     def click_continue_shopping(self) -> None:
         self.click(self.CONTINUE_SHOPPING_BUTTON)
