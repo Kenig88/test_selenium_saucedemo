@@ -2,7 +2,7 @@ import pytest
 import allure
 
 
-@allure.feature("Checkout Overview Page")
+@allure.feature("Checkout Step Two ")
 @pytest.mark.regression
 class TestCheckoutOverviewPage:
 

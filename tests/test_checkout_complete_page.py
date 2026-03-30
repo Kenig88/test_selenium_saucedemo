@@ -4,7 +4,7 @@ import allure
 from data.checkout_data import CheckoutCompleteMessages
 
 
-@allure.feature("Checkout Complete Page")
+@allure.feature("Checkout Complete")
 @pytest.mark.regression
 class TestCheckoutCompletePage:
 
