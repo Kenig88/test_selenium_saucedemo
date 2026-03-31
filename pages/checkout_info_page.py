@@ -10,7 +10,7 @@ class CheckoutInfoPage(BasePage):
     POSTAL_CODE_INPUT = (By.ID, "postal-code")
     CONTINUE_BUTTON = (By.ID, "continue")
     CANCEL_BUTTON = (By.ID, "cancel")
-    ERROR_MESSAGE = (By.CSS_SELECTOR, "h3[config-test='error']")
+    ERROR_MESSAGE = (By.CSS_SELECTOR, "[data-test='error']")
 
     def __init__(self, driver):
         super().__init__(driver, url=Links.CHECKOUT_INFO_PAGE)

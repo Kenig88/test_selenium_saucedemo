@@ -8,7 +8,7 @@ class LoginPage(BasePage):
     USERNAME = (By.ID, "user-name")
     PASSWORD = (By.ID, "password")
     LOGIN_BUTTON = (By.ID, "login-button")
-    ERROR_MESSAGE = (By.XPATH, "//h3[@config-test='error']")
+    ERROR_MESSAGE = (By.CSS_SELECTOR, "[data-test='error']")
 
     def __init__(self, driver):
         super().__init__(driver, url=Links.LOGIN_PAGE)
