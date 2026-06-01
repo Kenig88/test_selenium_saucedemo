@@ -1,5 +1,3 @@
-version: "3.9"
-
 x-ui-common: &ui-common
   build: .
   working_dir: /usr/workspace
@@ -23,17 +21,20 @@ services:
   all:
     <<: *ui-common
     command: >
-      sh -c "pytest -sv -n ${PYTEST_WORKERS:-2}
+      sh -c "mkdir -p logs allure-results &&
+      pytest -n $$PYTEST_WORKERS
       --alluredir=allure-results --clean-alluredir"
 
   e2e:
     <<: *ui-common
     command: >
-      sh -c "pytest -sv -m e2e -n ${PYTEST_WORKERS:-2}
+      sh -c "mkdir -p logs allure-results &&
+      pytest -m e2e -n $$PYTEST_WORKERS
       --alluredir=allure-results --clean-alluredir"
 
   regression:
     <<: *ui-common
     command: >
-      sh -c "pytest -sv -m regression -n ${PYTEST_WORKERS:-2}
+      sh -c "mkdir -p logs allure-results &&
+      pytest -m regression -n $$PYTEST_WORKERS
       --alluredir=allure-results --clean-alluredir"

@@ -33,4 +33,6 @@ RUN pip install --upgrade pip \
 
 COPY . .
 
-CMD ["pytest", "-sv", "-n", "2", "--alluredir=allure-results", "--clean-alluredir"]
+RUN mkdir -p logs allure-results
+
+CMD ["pytest", "-n", "2", "--alluredir=allure-results", "--clean-alluredir"]

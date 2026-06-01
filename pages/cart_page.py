@@ -14,7 +14,7 @@ class CartPage(BasePage):
         super().__init__(driver, url=Links.CART_PAGE)
 
     def is_opened(self) -> str:
-        return self.assert_page_opened("cart", self.TITLE)
+        return self.assert_page_opened("cart.html", self.TITLE)
 
     def remove_from_cart(self, product_name: str) -> None:
         remove_button = (

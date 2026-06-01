@@ -46,8 +46,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create allure-results directory
-        run: mkdir -p allure-results
+      - name: Create output directories
+        run: mkdir -p allure-results logs
 
       - name: Build Docker image
         run: docker compose build
@@ -59,7 +59,7 @@ jobs:
 
       - name: Fix permissions
         if: always()
-        run: sudo chown -R $USER:$USER allure-results || true
+        run: sudo chown -R $USER:$USER allure-results logs || true
 
       - name: Upload raw allure-results
         if: always()
@@ -67,6 +67,15 @@ jobs:
         with:
           name: allure-results
           path: allure-results
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs
+          path: logs/
           if-no-files-found: warn
           retention-days: 14
 

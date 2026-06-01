@@ -1,9 +1,16 @@
 import os
 
 
+def required_env(name: str) -> str:
+    value = os.getenv(name)
+    if not value:
+        raise RuntimeError(f"Environment variable {name} is not set")
+    return value
+
+
 class Username:
     STANDARD_USER = os.getenv("STANDARD_USER")
-    LOCKED_OUT_USER = os.getenv("LOCKED_OUT_USER") # заблокированный пользователь, сообщение "BLOCKED_USER"
+    LOCKED_OUT_USER = os.getenv("LOCKED_OUT_USER")  # заблокированный пользователь, сообщение "BLOCKED_USER"
     PROBLEM_USER = os.getenv("PROBLEM_USER")
     PERFORMANCE_GLITCH_USER = os.getenv("PERFORMANCE_GLITCH_USER")
     ERROR_USER = os.getenv("ERROR_USER")

@@ -14,7 +14,7 @@ class CheckoutOverviewPage(BasePage):
         super().__init__(driver, url=Links.CHECKOUT_OVERVIEW_PAGE)
 
     def is_opened(self) -> str:
-        return self.assert_page_opened("checkout-step-two", self.TITLE)
+        return self.assert_page_opened("checkout-step-two.html", self.TITLE)
 
     def click_finish(self) -> None:
         self.click(self.FINISH_BUTTON)

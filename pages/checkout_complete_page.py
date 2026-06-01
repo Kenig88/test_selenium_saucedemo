@@ -13,7 +13,7 @@ class CheckoutCompletePage(BasePage):
         super().__init__(driver, url=Links.CHECKOUT_COMPLETE_PAGE)
 
     def is_opened(self) -> str:
-        return self.assert_page_opened("checkout-complete", self.TITLE)
+        return self.assert_page_opened("checkout-complete.html", self.TITLE)
 
     def click_home_button(self) -> None:
         self.click(self.BACK_HOME_BUTTON)

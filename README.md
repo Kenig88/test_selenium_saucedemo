@@ -2,13 +2,13 @@
 
 Проект автоматизации UI-тестирования, построенный с использованием:
 
-🐍 Python + Pytest 
+🐍 Python + Pytest
 
-🌐 Selenium WebDriver 
+🌐 Selenium WebDriver
 
-🐳 Docker + Docker Compose 
+🐳 Docker + Docker Compose
 
-📊 Allure Report  + GitHub Actions CI
+📊 Allure Report + GitHub Actions CI
 
 ---
 
@@ -16,13 +16,14 @@
 
 Этот проект демонстрирует полноценный UI тестовый фреймворк, включающий:
 
-- Page Object Model (POM) архитектуру  
-- Разделение тестов, страниц и данных  
-- Фикстуры для управления браузером  
-- Allure-отчёты со скриншотами при падении  
-- Параллельный запуск тестов  
-- Docker-исполнение  
-- CI с публикацией отчётов  
+- Page Object Model (POM) архитектуру
+- Разделение тестов, страниц и данных
+- Фикстуры для управления браузером
+- Allure-отчёты со скриншотами при падении
+- Логирование действий через pytest logging
+- Параллельный запуск тестов
+- Docker-исполнение
+- CI с публикацией отчётов
 
 В качестве тестового окружения используется сайт SauceDemo.
 
@@ -35,7 +36,7 @@ saucedemo_test_ui/              # Корневая папка проекта
 │
 ├── pages/                      # Page Object слой (логика страниц)
 ├── tests/                      # UI тесты (test cases)
-├── config/                       # Тестовые данные (логины, товары, checkout)
+├── config/                     # Тестовые данные (логины, товары, checkout)
 │
 ├── conftest.py                 # Фикстуры (driver, hooks, setup/teardown)
 ├── pytest.ini                  # Конфигурация pytest
@@ -69,24 +70,6 @@ INVALID_PASSWORD = "___write___your___data___"
 
 ---
 
-# <p align="center"> 🐳 Локальный запуск тестов (через Docker). </p>
-
-Запуск всех тестов: 
-
-```bash
-docker compose run --rm all
-```
-
-Запуск отдельных наборов тестов:
-
-```bash
-
-docker compose run --rm e2e
-docker compose run --rm regression
-```
-
----
-
 # <p align="center"> 🧪 Локальный запуск без Docker. </p>
 
 Установка зависимостей:
@@ -98,13 +81,31 @@ pip install -r requirements.txt
 Запуск тестов (пример):
 
 ```bash
-pytest -v tests/test_login_page.py 
+pytest -sv tests/test_login_page.py 
 ```
 
 Параллельный запуск (пример):
 
 ```bash
 pytest tests/test_products_page.py -n 2
+```
+
+---
+
+# <p align="center"> 🐳 Локальный запуск тестов через Docker. </p>
+
+Запуск всех тестов:
+
+```bash
+docker compose run --rm all
+```
+
+Запуск отдельных наборов тестов:
+
+```bash
+
+docker compose run --rm e2e
+docker compose run --rm regression
 ```
 
 ---
@@ -148,7 +149,7 @@ allure serve allure-results
 
 🔹 Разделение данных:
 
-Все тестовые данные вынесены в data/.
+Все тестовые данные вынесены в папку config/.
 
 🔹 Чистые тесты:
 
@@ -157,6 +158,10 @@ allure serve allure-results
 🔹 Фикстуры pytest:
 
 Централизованное управление драйвером и тестами.
+
+🔹 Логирование:
+
+Логирование действий пользователя и навигации через pytest logging с выводом в консоль и файл.
 
 🔹 Параллельный запуск:
 
@@ -245,14 +250,3 @@ Graphs → Trend
 * CI/CD интеграцию
 * GitHub Pages публикацию
 * Историю запусков тестов
-
----
-
-# <p align="center"> 📈 Возможные улучшения. </p>
-
-* Разделение тестов на smoke / regression
-* Retry механизм
-* Selenium Grid / Selenoid
-* Логирование
-
----

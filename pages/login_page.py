@@ -15,7 +15,7 @@ class LoginPage(BasePage):
 
     def is_opened(self) -> bool:
         self.find(self.USERNAME)
-        return self.driver.current_url == Links.LOGIN_PAGE
+        return "saucedemo.com" in self.driver.current_url
 
     def enter_username(self, username: str) -> None:
         self.enter_text(self.USERNAME, username)

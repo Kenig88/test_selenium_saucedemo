@@ -16,14 +16,14 @@ class ProductsPage(BasePage):
         super().__init__(driver, url=Links.PRODUCTS_PAGE)
 
     def is_opened(self) -> str:
-        return self.assert_page_opened("inventory", self.TITLE)
+        return self.assert_page_opened("inventory.html", self.TITLE)
 
     def add_to_cart(self, product_name: str) -> None:
         locator = (
             By.XPATH,
             f"//div[contains(@class, 'inventory_item')]"
             f"[.//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']]"
-            f"//button"
+            f"//button[normalize-space()='Add to cart']"
         )
         self.click(locator)
 
@@ -32,7 +32,7 @@ class ProductsPage(BasePage):
             By.XPATH,
             f"//div[contains(@class, 'inventory_item')]"
             f"[.//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']]"
-            f"//button"
+            f"//button[normalize-space()='Remove']"
         )
         self.click(locator)
 

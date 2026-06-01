@@ -16,7 +16,7 @@ class CheckoutInfoPage(BasePage):
         super().__init__(driver, url=Links.CHECKOUT_INFO_PAGE)
 
     def is_opened(self) -> str:
-        return self.assert_page_opened("checkout-step-one", self.TITLE)
+        return self.assert_page_opened("checkout-step-one.html", self.TITLE)
 
     def enter_first_name(self, first_name: str) -> None:
         self.enter_text(self.FIRST_NAME_INPUT, first_name)
