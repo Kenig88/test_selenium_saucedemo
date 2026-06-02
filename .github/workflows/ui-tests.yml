@@ -12,6 +12,7 @@ on:
           - all
           - e2e
           - regression
+
       workers:
         description: "xdist workers count"
         required: true
