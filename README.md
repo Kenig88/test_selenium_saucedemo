@@ -81,7 +81,7 @@ pip install -r requirements.txt
 Запуск тестов (пример):
 
 ```bash
-pytest -sv tests/test_login_page.py 
+pytest tests/test_login_page.py 
 ```
 
 Параллельный запуск (пример):
@@ -103,7 +103,6 @@ docker compose run --rm all
 Запуск отдельных наборов тестов:
 
 ```bash
-
 docker compose run --rm e2e
 docker compose run --rm regression
 ```

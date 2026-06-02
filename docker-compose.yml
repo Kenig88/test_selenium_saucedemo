@@ -1,8 +1,12 @@
 x-ui-common: &ui-common
+
   build: .
+
   working_dir: /usr/workspace
+
   volumes:
     - .:/usr/workspace
+
   environment:
     CHROME_BIN: /usr/bin/chromium
     CHROMEDRIVER_PATH: /usr/bin/chromedriver
