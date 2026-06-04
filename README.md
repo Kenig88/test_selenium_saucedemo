@@ -94,6 +94,12 @@ pytest tests/test_products_page.py -n 2
 
 # <p align="center"> 🐳 Локальный запуск тестов через Docker. </p>
 
+Создание окружения Docker image перед тестами:
+
+```bash
+docker compose build
+```
+
 Запуск всех тестов:
 
 ```bash
@@ -111,19 +117,19 @@ docker compose run --rm regression
 
 # <p align="center"> 📊 Генерация Allure-отчёта локально. </p>
 
-После выполнения тестов:
+Локальный запуск тестов с созданием Allure-отчёта:
 
 ```bash
 pytest --alluredir=allure-results
 ```
 
-Генерация отчёта:
+Для генерации статического отчёта:
 
 ```bash
 allure generate allure-results -o allure-report --clean
 ```
 
-Запуск:
+Для просмотра отчёта локально:
 
 ```bash
 allure serve allure-results
