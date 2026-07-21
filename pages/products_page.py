@@ -26,6 +26,7 @@ class ProductsPage(BasePage):
             f"//button[normalize-space()='Add to cart']"
         )
         self.click(locator)
+        self.wait_for_elements_count(self.CART_BADGE, 1)
 
     def remove_from_cart(self, product_name: str) -> None:
         locator = (
@@ -35,6 +36,7 @@ class ProductsPage(BasePage):
             f"//button[normalize-space()='Remove']"
         )
         self.click(locator)
+        self.wait_for_element_absent(self.CART_BADGE)
 
     def open_product_details(self, product_name: str) -> None:
         locator = (
@@ -47,7 +49,9 @@ class ProductsPage(BasePage):
         self.click(self.CART)
 
     def sort_by(self, value: str) -> None:
+        prices_before_sort = self.get_prices()
         Select(self.find(self.SORT)).select_by_value(value)
+        self.wait.until(lambda _: self.get_prices() != prices_before_sort)
 
     def get_products_count(self) -> int:
         return self.get_elements_count(self.PRODUCT)

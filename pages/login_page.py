@@ -1,7 +1,6 @@
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
 from config.links import Links
-import allure
 
 
 class LoginPage(BasePage):

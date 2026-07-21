@@ -10,8 +10,10 @@ on:
         type: choice
         options:
           - all
-          - e2e
+          - smoke
           - regression
+          - negative
+          - e2e
 
       workers:
         description: "xdist workers count"
@@ -32,14 +34,10 @@ jobs:
       contents: write
 
     env:
+      BASE_URL: https://www.saucedemo.com/
       PYTEST_WORKERS: ${{ github.event.inputs.workers }}
       STANDARD_USER: ${{ secrets.STANDARD_USER }}
       LOCKED_OUT_USER: ${{ secrets.LOCKED_OUT_USER }}
-      PROBLEM_USER: ${{ secrets.PROBLEM_USER }}
-      PERFORMANCE_GLITCH_USER: ${{ secrets.PERFORMANCE_GLITCH_USER }}
-      ERROR_USER: ${{ secrets.ERROR_USER }}
-      VISUAL_USER: ${{ secrets.VISUAL_USER }}
-      INVALID_LOGIN: ${{ secrets.INVALID_LOGIN }}
       SECRET_SAUCE: ${{ secrets.SECRET_SAUCE }}
       INVALID_PASSWORD: ${{ secrets.INVALID_PASSWORD }}
 
@@ -56,7 +54,9 @@ jobs:
       - name: Run selected suite
         id: tests
         continue-on-error: true
-        run: docker compose run --rm ${{ github.event.inputs.suite }}
+        env:
+          SELECTED_SUITE: ${{ github.event.inputs.suite }}
+        run: docker compose run --rm "$SELECTED_SUITE"
 
       - name: Fix permissions
         if: always()
@@ -136,7 +136,7 @@ jobs:
 
       - name: Publish report to gh-pages
         if: always()
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages

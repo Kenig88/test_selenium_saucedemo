@@ -8,6 +8,7 @@ from config.products_data import ProductNames
 @pytest.mark.regression
 class TestProductsPage:
 
+    @pytest.mark.smoke
     @allure.story("Добавление товара и навигация")
     @allure.title("Пользователь может добавить товар в корзину")
     @allure.severity(allure.severity_level.CRITICAL)

@@ -8,6 +8,7 @@ from config.checkout_data import CheckoutInfoData, ErrorMessagesCheckoutInfo
 @pytest.mark.regression
 class TestCheckoutInfoPage:
 
+    @pytest.mark.smoke
     @allure.story("Успешное заполнение checkout формы")
     @allure.title("Пользователь может перейти к overview с валидными данными")
     @allure.severity(allure.severity_level.CRITICAL)
@@ -20,6 +21,7 @@ class TestCheckoutInfoPage:
         opened_checkout_info_page.click_continue_button()
         assert checkout_overview_page.is_opened() == "Checkout: Overview", "Страница CheckoutOverviewPage не открылась"
 
+    @pytest.mark.negative
     @allure.story("Валидация обязательных полей")
     @allure.title("Пользователь видит ошибки при пустых обязательных полях")
     @allure.severity(allure.severity_level.NORMAL)

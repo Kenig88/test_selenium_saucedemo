@@ -8,6 +8,7 @@ from config.checkout_data import CheckoutCompleteMessages
 @pytest.mark.regression
 class TestCheckoutCompletePage:
 
+    @pytest.mark.smoke
     @allure.story("Успешное завершение заказа")
     @allure.title("Пользователь видит подтверждение заказа и может вернуться к товарам")
     @allure.severity(allure.severity_level.CRITICAL)

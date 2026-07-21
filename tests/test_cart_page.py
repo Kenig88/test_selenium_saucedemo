@@ -24,6 +24,7 @@ class TestCartPage:
         page.remove_from_cart(ProductNames.BIKE_LIGHT)
         assert not page.is_product_in_cart(ProductNames.BIKE_LIGHT)
 
+    @pytest.mark.smoke
     @allure.story("Переход в checkout")
     @allure.title("Пользователь может перейти к оформлению заказа")
     @allure.severity(allure.severity_level.CRITICAL)

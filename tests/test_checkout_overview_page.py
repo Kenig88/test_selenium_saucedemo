@@ -12,6 +12,7 @@ class TestCheckoutOverviewPage:
     def test_user_sees_added_product_on_checkout_overview(self, opened_checkout_overview_page):
         assert opened_checkout_overview_page.get_products_count() == 1
 
+    @pytest.mark.smoke
     @allure.story("Успешное завершение заказа")
     @allure.title("Пользователь может завершить checkout с overview страницы")
     @allure.severity(allure.severity_level.CRITICAL)

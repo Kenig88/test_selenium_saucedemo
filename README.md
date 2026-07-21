@@ -1,76 +1,128 @@
-# <p align="center"> 🛒 SauceDemo UI Test Automation </p>
+# <p align="center"> SauceDemo UI Test Automation</p>
 
-Проект автоматизации UI-тестирования, построенный с использованием:
+UI-проект автоматизации тестирования интернет-магазина [SauceDemo](https://www.saucedemo.com/).
 
-🐍 Python + Pytest
-
-🌐 Selenium WebDriver
-
-🐳 Docker + Docker Compose
-
-📊 Allure Report + GitHub Actions CI
+Фреймворк построен на Python, Pytest и Selenium WebDriver, использует Page Object Model, поддерживает параллельный запуск, Docker, Allure Report и ручной запуск наборов тестов через GitHub Actions.
 
 ---
 
-# <p align="center"> - Описание проекта - </p>
+## <p align="center">Технологии</p>
 
-Этот проект демонстрирует полноценный UI тестовый фреймворк, включающий:
-
-- Page Object Model (POM) архитектуру
-- Разделение тестов, страниц и данных
-- Фикстуры для управления браузером
-- Allure-отчёты со скриншотами при падении
-- Логирование действий через pytest logging
-- Параллельный запуск тестов
-- Docker-исполнение
-- CI с публикацией отчётов
-
-В качестве тестового окружения используется сайт SauceDemo.
+- Python 3.11
+- Pytest
+- Selenium WebDriver
+- Pytest-xdist
+- Allure Pytest
+- Docker и Docker Compose
+- GitHub Actions
+- GitHub Pages
 
 ---
 
-# <p align="center"> - Структура проекта - </p>
+## <p align="center">Что покрывает проект</p>
+
+- успешная и неуспешная авторизация;
+- валидация обязательных полей;
+- отображение и сортировка товаров;
+- переход на страницу деталей товара;
+- добавление и удаление товара;
+- работа с корзиной;
+- checkout flow;
+- успешное завершение заказа;
+- два полных E2E-сценария оформления заказа.
+
+На момент подготовки проекта Pytest собирает **25 тестов**.
+
+---
+
+## <p align="center">Архитектура</p>
+
+Проект использует Page Object Model:
+
+- `pages/` содержит локаторы и действия со страницами;
+- `tests/` содержит проверки пользовательских сценариев;
+- `config/` содержит тестовые данные, URL и тексты ошибок;
+- `conftest.py` отвечает за WebDriver, Page Object fixtures и подготовку состояний;
+- Allure-разметка находится на уровне тестов и пользовательских шагов.
 
 ```text
-saucedemo_test_ui/              # Корневая папка проекта
-│
-├── pages/                      # Page Object слой (логика страниц)
-├── tests/                      # UI тесты (test cases)
-├── config/                     # Тестовые данные (логины, товары, checkout)
-│
-├── conftest.py                 # Фикстуры (driver, hooks, setup/teardown)
-├── pytest.ini                  # Конфигурация pytest
-├── requirements.txt            # Зависимости проекта
-│
-├── Dockerfile                  # Docker образ для запуска тестов
-├── docker-compose.yml          # Docker orchestration
-│
-├── .env.example                # Пример переменных окружения
-└── README.md                   # Документация проекта
+saucedemo_test_ui/
+├── .github/
+│   └── workflows/
+│       └── ui-tests.yml
+├── config/
+│   ├── checkout_data.py
+│   ├── links.py
+│   ├── login_data.py
+│   └── products_data.py
+├── pages/
+│   ├── base_page.py
+│   ├── cart_page.py
+│   ├── checkout_complete_page.py
+│   ├── checkout_info_page.py
+│   ├── checkout_overview_page.py
+│   ├── login_page.py
+│   ├── product_details_page.py
+│   └── products_page.py
+├── tests/
+│   ├── e2e/
+│   ├── test_cart_page.py
+│   ├── test_checkout_complete_page.py
+│   ├── test_checkout_info_page.py
+│   ├── test_checkout_overview_page.py
+│   ├── test_login_page.py
+│   └── test_products_page.py
+├── conftest.py
+├── pytest.ini
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+├── .env.example
+└── README.md
 ```
 
 ---
 
-# <p align="center"> - Переменные окружения - </p>
+## <p align="center">Переменные окружения</p>
 
-Создайте файл .env на основе .env.example:
+Создай `.env` на основе `.env.example`:
 
-```text
-STANDARD_USER = "___write___your___data___"
-LOCKED_OUT_USER = "___write___your___data___"
-PROBLEM_USER = "___write___your___data___"
-PERFORMANCE_GLITCH_USER = "___write___your___data___"
-ERROR_USER = "___write___your___data___"
-VISUAL_USER = "___write___your___data___"
-INVALID_LOGIN = "___write___your___data___"
+```dotenv
+BASE_URL=https://www.saucedemo.com/
 
-SECRET_SAUCE = "___write___your___data___"
-INVALID_PASSWORD = "___write___your___data___"
+STANDARD_USER=standard_user
+LOCKED_OUT_USER=locked_out_user
+SECRET_SAUCE=your_password
+INVALID_PASSWORD=invalid_password
 ```
+
+Обязательные значения проверяются при загрузке тестовых данных. Если переменная отсутствует, запуск завершится с понятной ошибкой.
+
+`BASE_URL` необязателен: по умолчанию используется `https://www.saucedemo.com/`.
+
+Файл `.env` исключён из Git через `.gitignore`.
 
 ---
 
-# <p align="center"> 🧪 Локальный запуск без Docker. </p>
+## <p align="center">Установка и локальный запуск</p>
+
+Создание виртуального окружения:
+
+```bash
+python -m venv .venv
+```
+
+Активация в Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+Активация в Linux или macOS:
+
+```bash
+source .venv/bin/activate
+```
 
 Установка зависимостей:
 
@@ -78,23 +130,53 @@ INVALID_PASSWORD = "___write___your___data___"
 pip install -r requirements.txt
 ```
 
-Запуск тестов (пример):
+Запуск всех тестов:
 
 ```bash
-pytest tests/test_login_page.py 
+pytest
 ```
 
-Параллельный запуск (пример):
+Параллельный запуск:
 
 ```bash
-pytest tests/test_products_page.py -n 2
+pytest -n 2
 ```
+
+Запуск отдельного файла:
+
+```bash
+pytest tests/test_login_page.py
+```
+
+Тесты запускают Chrome в headless-режиме. Локально Selenium использует установленный ChromeDriver или Selenium Manager. В Docker пути к Chromium и ChromeDriver передаются через переменные окружения.
 
 ---
 
-# <p align="center"> 🐳 Локальный запуск тестов через Docker. </p>
+## <p align="center">Маркеры тестов</p>
 
-Создание окружения Docker image перед тестами:
+| Маркер | Назначение |
+|---|---|
+| `smoke` | Критические проверки основного пользовательского пути |
+| `regression` | Полный регрессионный набор |
+| `negative` | Проверки валидации и ошибочных сценариев |
+| `e2e` | Полные пользовательские цепочки оформления заказа |
+
+Запуск наборов локально:
+
+```bash
+pytest -m smoke
+pytest -m regression
+pytest -m negative
+pytest -m e2e
+```
+
+Маркеры могут пересекаться. Например, основной E2E-сценарий одновременно входит в `e2e`, `regression` и `smoke`.
+
+---
+
+## <p align="center">Запуск через Docker</p>
+
+Сборка образа:
 
 ```bash
 docker compose build
@@ -106,152 +188,138 @@ docker compose build
 docker compose run --rm all
 ```
 
-Запуск отдельных наборов тестов:
+Запуск отдельных наборов тестов через одноимённые Docker Compose-сервисы:
 
 ```bash
-docker compose run --rm e2e
+docker compose run --rm smoke
 docker compose run --rm regression
+docker compose run --rm negative
+docker compose run --rm e2e
+```
+
+Количество параллельных worker-процессов можно задать через `.env` или при запуске:
+
+```bash
+PYTEST_WORKERS=4 docker compose run --rm all
+```
+
+Для Windows PowerShell:
+
+```powershell
+$env:PYTEST_WORKERS=4
+docker compose run --rm all
 ```
 
 ---
 
-# <p align="center"> 📊 Генерация Allure-отчёта локально. </p>
+## <p align="center">Allure Report</p>
 
-Локальный запуск тестов с созданием Allure-отчёта:
-
-```bash
-pytest --alluredir=allure-results
-```
-
-Для генерации статического отчёта:
+Создание результатов:
 
 ```bash
-allure generate allure-results -o allure-report --clean
+pytest --alluredir=allure-results --clean-alluredir
 ```
 
-Для просмотра отчёта локально:
+Просмотр интерактивного отчёта:
 
 ```bash
 allure serve allure-results
 ```
 
----
+Создание статического отчёта:
 
-# <p align="center"> 📸 Скриншоты при падении. </p>
-
-При падении теста автоматически:
-
-* Делается скриншот
-* Прикрепляется к Allure отчёту
-
----
-
-# <p align="center"> 🧠 Особенности фреймворка. </p>
-
-🔹 Page Object Model (POM):
-
-Чистое разделение логики страниц и тестов.
-
-🔹 Разделение данных:
-
-Все тестовые данные вынесены в папку config/.
-
-🔹 Чистые тесты:
-
-Тесты описывают только пользовательские сценарии.
-
-🔹 Фикстуры pytest:
-
-Централизованное управление драйвером и тестами.
-
-🔹 Логирование:
-
-Логирование действий пользователя и навигации через pytest logging с выводом в консоль и файл.
-
-🔹 Параллельный запуск:
-
-Поддержка pytest-xdist.
-
-🔹 Docker:
-
-Одинаковое выполнение тестов в любом окружении.
-
----
-
-# <p align="center"> 🧪 Покрываемые сценарии. </p>
-
-* Авторизация
-* Просмотр товаров
-* Добавление в корзину
-* Checkout flow
-
----
-
-# <p align="center"> 🚀 CI: GitHub Actions + Allure + Pages. </p>
-
-Проект включает CI-пайплайн с автоматическим запуском тестов и публикацией отчётов.
-
-Возможности CI:
-
-* Ручной запуск workflow
-* Запуск тестов в Docker / Python окружении
-* Генерация Allure HTML отчёта
-* Публикация в GitHub Pages
-* Сохранение истории запусков (Trend graph)
-
----
-
-# <p align="center"> ▶ Как запустить CI. </p>
-
-1. Перейдите в GitHub → Actions
-2. Выберите workflow:
-
-```text
-UI Tests + Allure Report
+```bash
+allure generate allure-results -o allure-report --clean
 ```
 
-3. Нажмите Run workflow
-4. Запустите выполнение
+При падении теста `conftest.py` пытается сделать скриншот браузера и прикрепить его к Allure. Ошибка при создании скриншота не заменяет исходную ошибку теста.
 
 ---
 
-# <p align="center"> 🌐 Онлайн-отчёт Allure. </p>
+## <p align="center">Логирование</p>
 
-После запуска CI отчёт доступен по адресу:
+Pytest выводит логи в терминал и сохраняет их в:
 
 ```text
-https://kenig88.github.io/test_selenium_saucedemo/
+logs/ui-tests.log
 ```
+
+Папка `logs/` создаётся перед Docker-запуском и исключена из Git.
 
 ---
 
-# <p align="center"> 📈 История запусков (Allure Trend). </p>
+## <p align="center">GitHub Actions CI</p>
 
-1. Откройте отчёт
-2. Перейдите в:
+Workflow расположен в:
+
+```text
+.github/workflows/ui-tests.yml
+```
+
+Запуск выполняется вручную через вкладку **Actions**. Перед стартом можно выбрать:
+
+- `all`;
+- `smoke`;
+- `regression`;
+- `negative`;
+- `e2e`;
+- количество worker-процессов Pytest-xdist.
+
+В GitHub необходимо создать Repository Secrets:
+
+```text
+STANDARD_USER
+LOCKED_OUT_USER
+SECRET_SAUCE
+INVALID_PASSWORD
+```
+
+Workflow:
+
+1. собирает Docker-образ;
+2. запускает выбранный набор тестов;
+3. сохраняет `allure-results` и логи как artifacts;
+4. восстанавливает историю предыдущих Allure-запусков;
+5. генерирует отчёт;
+6. публикует его в ветку `gh-pages`;
+7. возвращает ошибочный статус, если тесты не прошли.
+
+Онлайн-отчёт проекта:
+
+```text
+https://kenig88.github.io/saucedemo_test_ui/
+```
+
+История запусков доступна в Allure:
 
 ```text
 Graphs → Trend
 ```
 
-3. Посмотрите динамику выполнения тестов
+---
+
+## <p align="center">Надёжность тестов</p>
+
+В проекте используются:
+
+- явные ожидания Selenium вместо `time.sleep()`;
+- отдельный WebDriver для каждого теста;
+- гарантированное закрытие браузера через `try/finally`;
+- ожидание обновления корзины после добавления и удаления товара;
+- ожидание удаления товара из DOM;
+- ожидание изменения списка цен после сортировки;
+- скриншот при падении теста;
+- параллельный запуск через Pytest-xdist.
 
 ---
 
-# <p align="center"> 🔒 Безопасность. </p>
+## <p align="center">Что демонстрирует проект</p>
 
-* .env исключён через .gitignore
-* Нет использования продакшн-данных
-* Переменные через environment
-
----
-
-# <p align="center"> 🏆 Что демонстрирует проект. </p>
-
-* UI automation (Selenium + Pytest)
-* Page Object Model
-* Allure отчёты
-* Docker запуск
-* CI/CD интеграцию
-* GitHub Pages публикацию
-* Историю запусков тестов
+- построение UI test automation framework;
+- Page Object Model;
+- работу с Selenium WebDriver и явными ожиданиями;
+- управление тестовыми состояниями через Pytest fixtures;
+- позитивные, негативные, smoke, regression и E2E-проверки;
+- Allure-отчётность;
+- контейнерный запуск;
+- CI/CD-интеграцию и публикацию отчётов в GitHub Pages.

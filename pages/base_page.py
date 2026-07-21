@@ -68,6 +68,18 @@ class BasePage:
         logger.debug("Find all elements: %s", locator)
         return self.driver.find_elements(*locator)
 
+    def wait_for_element_absent(self, locator: Locator) -> None:
+        """Дождаться исчезновения элемента из DOM или его невидимости."""
+        logger.debug("Wait for element to disappear: %s", locator)
+        self.wait.until(EC.invisibility_of_element_located(locator))
+
+    def wait_for_elements_count(self, locator: Locator, expected_count: int) -> None:
+        """Дождаться ожидаемого количества элементов."""
+        logger.debug("Wait for %s elements: %s", expected_count, locator)
+        self.wait.until(
+            lambda driver: len(driver.find_elements(*locator)) == expected_count
+        )
+
 
     # --- Actions (действия пользователя) ---
 

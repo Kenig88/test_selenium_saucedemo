@@ -1,28 +1,27 @@
+import logging
 import os
-from dotenv import load_dotenv
 
-load_dotenv()  # Загружает переменные окружения перед запуском всех тестов
-
-from pages.login_page import LoginPage
-from pages.products_page import ProductsPage
-from pages.product_details_page import ProductDetailsPage
-from pages.cart_page import CartPage
-from pages.checkout_info_page import CheckoutInfoPage
-from pages.checkout_overview_page import CheckoutOverviewPage
-from pages.checkout_complete_page import CheckoutCompletePage
-
+import allure
+import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
-import pytest
-import allure
 
-from config.login_data import Username, Password
-from config.products_data import ProductNames
 from config.checkout_data import CheckoutInfoData
+from config.login_data import Password, Username
+from config.products_data import ProductNames
+from pages.cart_page import CartPage
+from pages.checkout_complete_page import CheckoutCompletePage
+from pages.checkout_info_page import CheckoutInfoPage
+from pages.checkout_overview_page import CheckoutOverviewPage
+from pages.login_page import LoginPage
+from pages.product_details_page import ProductDetailsPage
+from pages.products_page import ProductsPage
+
+logger = logging.getLogger(__name__)
 
 
-# Хук для прикрепления скриншота при падении теста (усилил для xdist)
+# Прикрепляет скриншот к Allure при падении теста
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item):
     outcome = yield
@@ -35,11 +34,14 @@ def pytest_runtest_makereport(item):
             if hasattr(item.config, "workerinput"):
                 worker_id = item.config.workerinput.get("workerid", "worker")
 
-            allure.attach(
-                driver.get_screenshot_as_png(),
-                name=f"failed-{worker_id}",
-                attachment_type=allure.attachment_type.PNG
-            )
+            try:
+                allure.attach(
+                    driver.get_screenshot_as_png(),
+                    name=f"failed-{worker_id}",
+                    attachment_type=allure.attachment_type.PNG,
+                )
+            except Exception:
+                logger.exception("Не удалось прикрепить скриншот к Allure")
 
 
 # Создаёт и закрывает WebDriver для каждого теста
@@ -49,7 +51,7 @@ def browser_fixture():
     options.add_argument("--incognito")
     options.add_argument("--window-size=1920,1080")
 
-    # Для Docker и CI:
+    # Для Docker и CI
     options.add_argument("--headless=new")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
@@ -68,8 +70,10 @@ def browser_fixture():
 
     driver.set_page_load_timeout(20)
 
-    yield driver
-    driver.quit()
+    try:
+        yield driver
+    finally:
+        driver.quit()
 
 
 # Возвращает PageObject страницы логина
@@ -115,7 +119,7 @@ def checkout_complete_page(browser_fixture):
 
 
 # =========================
-# фикстуры действий
+# Фикстуры действий
 # =========================
 
 # Выполняет логин пользователя
@@ -126,7 +130,6 @@ def logged_in_products_page(login_page, products_page):
     return products_page
 
 
-# отдельная фикстура только для корзины для проверки test_cart_page.py
 # Открывает корзину с добавленным товаром
 @pytest.fixture()
 def cart_page_with_product(logged_in_products_page, cart_page):
@@ -138,7 +141,7 @@ def cart_page_with_product(logged_in_products_page, cart_page):
     return _open
 
 
-# Открывает checkout step one (после корзины с дефолтным товаром)
+# Открывает checkout step one после добавления товара в корзину
 @pytest.fixture()
 def opened_checkout_info_page(logged_in_products_page, cart_page, checkout_info_page):
     logged_in_products_page.add_to_cart(ProductNames.BACKPACK)
@@ -147,13 +150,13 @@ def opened_checkout_info_page(logged_in_products_page, cart_page, checkout_info_
     return checkout_info_page
 
 
-# Открывает checkout overview (после заполнения данных)
+# Открывает checkout overview после заполнения данных
 @pytest.fixture()
 def opened_checkout_overview_page(opened_checkout_info_page, checkout_overview_page):
     opened_checkout_info_page.enter_checkout_form(
         first_name=CheckoutInfoData.FIRST_NAME,
         last_name=CheckoutInfoData.LAST_NAME,
-        postal_code=CheckoutInfoData.POSTAL_CODE
+        postal_code=CheckoutInfoData.POSTAL_CODE,
     )
     opened_checkout_info_page.click_continue_button()
     return checkout_overview_page

@@ -1,23 +1,24 @@
 import allure
 import pytest
 
+from config.checkout_data import CheckoutCompleteMessages, CheckoutInfoData
 from config.products_data import ProductNames
-from config.checkout_data import CheckoutInfoData, CheckoutCompleteMessages
 
 
 @allure.feature("E2E")
 @pytest.mark.e2e
-@allure.title("Пользователь может пройти полный цикл checkout flow")
+@pytest.mark.regression
+@allure.title("Пользователь может оформить заказ со страницы деталей товара")
 @allure.severity(allure.severity_level.BLOCKER)
-def test_checkout_flow(
+def test_checkout_flow_from_product_details_page(
         logged_in_products_page,
-        products_page,
         product_details_page,
         cart_page,
         checkout_info_page,
         checkout_overview_page,
-        checkout_complete_page
+        checkout_complete_page,
 ):
+    products_page = logged_in_products_page
     product_name = ProductNames.RED_TSHIRT
 
     with allure.step("Открыта Products page"):
@@ -46,7 +47,7 @@ def test_checkout_flow(
         checkout_info_page.enter_checkout_form(
             first_name=CheckoutInfoData.FIRST_NAME,
             last_name=CheckoutInfoData.LAST_NAME,
-            postal_code=CheckoutInfoData.POSTAL_CODE
+            postal_code=CheckoutInfoData.POSTAL_CODE,
         )
         checkout_info_page.click_continue_button()
 

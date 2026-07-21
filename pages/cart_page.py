@@ -17,13 +17,14 @@ class CartPage(BasePage):
         return self.assert_page_opened("cart.html", self.TITLE)
 
     def remove_from_cart(self, product_name: str) -> None:
-        remove_button = (
+        cart_item = (
             By.XPATH,
             f"//div[contains(@class, 'cart_item')]"
             f"[.//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']]"
-            f"//button"
         )
+        remove_button = (By.XPATH, f"{cart_item[1]}//button")
         self.click(remove_button)
+        self.wait_for_element_absent(cart_item)
 
     def click_continue_shopping(self) -> None:
         self.click(self.CONTINUE_SHOPPING_BUTTON)

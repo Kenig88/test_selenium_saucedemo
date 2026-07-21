@@ -1,6 +1,13 @@
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 class Links:
-    HOST = "https://www.saucedemo.com/"
-    LOGIN_PAGE = f"{HOST}"
+    HOST = os.getenv("BASE_URL", "https://www.saucedemo.com/").rstrip("/") + "/"
+    LOGIN_PAGE = HOST
     PRODUCTS_PAGE = f"{HOST}inventory.html"
     PRODUCTS_DETAILS_PAGE = f"{HOST}inventory-item.html?id="
     CART_PAGE = f"{HOST}cart.html"

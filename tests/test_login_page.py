@@ -8,6 +8,7 @@ from config.login_data import Username, Password, ErrorMessages
 @pytest.mark.regression
 class TestLoginPage:
 
+    @pytest.mark.smoke
     @allure.story("Успешный логин")
     @allure.title("Пользователь может войти с валидными данными")
     @allure.severity(allure.severity_level.CRITICAL)
@@ -16,6 +17,7 @@ class TestLoginPage:
         login_page.user_input(Username.STANDARD_USER, Password.SECRET_SAUCE)
         assert products_page.is_opened() == "Products", "Страница ProductsPage не открылась"
 
+    @pytest.mark.negative
     @allure.story("Валидация формы")
     @allure.title("Пользователь видит ошибки при пустых обязательных полях")
     @allure.severity(allure.severity_level.NORMAL)
@@ -39,6 +41,7 @@ class TestLoginPage:
         login_page.click_login_button()
         assert login_page.error_message_text() == expected_error
 
+    @pytest.mark.negative
     @allure.story("Невалидный логин")
     @allure.title("Пользователь видит ошибку при неуспешной попытке входа")
     @allure.severity(allure.severity_level.CRITICAL)

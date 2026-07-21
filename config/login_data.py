@@ -1,5 +1,9 @@
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 def required_env(name: str) -> str:
     value = os.getenv(name)
@@ -9,18 +13,13 @@ def required_env(name: str) -> str:
 
 
 class Username:
-    STANDARD_USER = os.getenv("STANDARD_USER")
-    LOCKED_OUT_USER = os.getenv("LOCKED_OUT_USER")  # заблокированный пользователь, сообщение "BLOCKED_USER"
-    PROBLEM_USER = os.getenv("PROBLEM_USER")
-    PERFORMANCE_GLITCH_USER = os.getenv("PERFORMANCE_GLITCH_USER")
-    ERROR_USER = os.getenv("ERROR_USER")
-    VISUAL_USER = os.getenv("VISUAL_USER")
-    INVALID_LOGIN = os.getenv("INVALID_LOGIN")
+    STANDARD_USER = required_env("STANDARD_USER")
+    LOCKED_OUT_USER = required_env("LOCKED_OUT_USER")
 
 
 class Password:
-    SECRET_SAUCE = os.getenv("SECRET_SAUCE")
-    INVALID_PASSWORD = os.getenv("INVALID_PASSWORD")
+    SECRET_SAUCE = required_env("SECRET_SAUCE")
+    INVALID_PASSWORD = required_env("INVALID_PASSWORD")
 
 
 class ErrorMessages:

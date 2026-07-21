@@ -20,6 +20,7 @@ class ProductDetailsPage(BasePage):
 
     def add_to_cart(self) -> None:
         self.click(self.ADD_TO_CART_BUTTON)
+        self.wait_for_elements_count(self.CART_BADGE, 1)
 
     def get_cart_count(self) -> int:
         badges = self.find_all(self.CART_BADGE)
