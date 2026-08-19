@@ -1,55 +1,54 @@
-# <p align="center"> SauceDemo UI Test Automation</p>
+# SauceDemo UI Test Automation
 
-UI-проект автоматизации тестирования интернет-магазина [SauceDemo](https://www.saucedemo.com/).
+UI-автотесты учебного сайта [SauceDemo](https://www.saucedemo.com/) на Python,
+Pytest и Selenium. Проект использует Page Object, запускается локально или в
+Docker и публикует Allure Report через GitHub Actions.
 
-Фреймворк построен на Python, Pytest и Selenium WebDriver, использует Page Object Model, поддерживает параллельный запуск, Docker, Allure Report и ручной запуск наборов тестов через GitHub Actions.
+[![UI Tests](https://github.com/Kenig88/test_selenium_saucedemo/actions/workflows/ui-tests.yml/badge.svg)](https://github.com/Kenig88/test_selenium_saucedemo/actions/workflows/ui-tests.yml)
 
----
+## Что проверяется
 
-## <p align="center">Технологии</p>
+- успешный и неуспешный логин;
+- валидация обязательных полей;
+- список товаров и сортировка по цене;
+- добавление и удаление одного или нескольких товаров;
+- корзина;
+- оба шага checkout;
+- завершение заказа;
+- два сквозных E2E-сценария.
+
+## Наборы тестов
+
+В проекте 26 тестовых сценариев. Один тест может входить сразу в несколько
+наборов.
+
+| Suite | Маркер | Количество |
+| --- | --- | ---: |
+| Все тесты | без маркера | 26 |
+| Smoke | `smoke` | 7 |
+| Regression | `regression` | 24 |
+| Negative | `negative` | 7 |
+| E2E | `e2e` | 2 |
+
+E2E-тесты вынесены в отдельный набор и не дублируются в regression. Основной
+E2E-сценарий при этом входит в smoke.
+
+## Стек
 
 - Python 3.11
 - Pytest
 - Selenium WebDriver
-- Pytest-xdist
 - Allure Pytest
+- pytest-xdist
 - Docker и Docker Compose
 - GitHub Actions
 - GitHub Pages
 
----
-
-## <p align="center">Что покрывает проект</p>
-
-- успешная и неуспешная авторизация;
-- валидация обязательных полей;
-- отображение и сортировка товаров;
-- переход на страницу деталей товара;
-- добавление и удаление товара;
-- работа с корзиной;
-- checkout flow;
-- успешное завершение заказа;
-- два полных E2E-сценария оформления заказа.
-
-На момент подготовки проекта Pytest собирает **25 тестов**.
-
----
-
-## <p align="center">Архитектура</p>
-
-Проект использует Page Object Model:
-
-- `pages/` содержит локаторы и действия со страницами;
-- `tests/` содержит проверки пользовательских сценариев;
-- `config/` содержит тестовые данные, URL и тексты ошибок;
-- `conftest.py` отвечает за WebDriver, Page Object fixtures и подготовку состояний;
-- Allure-разметка находится на уровне тестов и пользовательских шагов.
+## Структура
 
 ```text
-saucedemo_test_ui/
-├── .github/
-│   └── workflows/
-│       └── ui-tests.yml
+test_selenium_saucedemo/
+├── .github/workflows/ui-tests.yml
 ├── config/
 │   ├── checkout_data.py
 │   ├── links.py
@@ -57,111 +56,62 @@ saucedemo_test_ui/
 │   └── products_data.py
 ├── pages/
 │   ├── base_page.py
+│   ├── login_page.py
+│   ├── products_page.py
+│   ├── product_details_page.py
 │   ├── cart_page.py
-│   ├── checkout_complete_page.py
 │   ├── checkout_info_page.py
 │   ├── checkout_overview_page.py
-│   ├── login_page.py
-│   ├── product_details_page.py
-│   └── products_page.py
+│   └── checkout_complete_page.py
 ├── tests/
 │   ├── e2e/
-│   ├── test_cart_page.py
-│   ├── test_checkout_complete_page.py
-│   ├── test_checkout_info_page.py
-│   ├── test_checkout_overview_page.py
-│   ├── test_login_page.py
-│   └── test_products_page.py
+│   └── test_*.py
 ├── conftest.py
-├── pytest.ini
-├── requirements.txt
-├── Dockerfile
 ├── docker-compose.yml
-├── .env.example
-└── README.md
+├── Dockerfile
+├── pytest.ini
+└── requirements.txt
 ```
 
----
+## Переменные окружения
 
-## <p align="center">Переменные окружения</p>
+Создайте локальный файл `.env` из шаблона:
 
-Создай `.env` на основе `.env.example`:
+```bash
+cp .env.example .env
+```
+
+Заполните значения:
 
 ```dotenv
 BASE_URL=https://www.saucedemo.com/
-
-STANDARD_USER=standard_user
-LOCKED_OUT_USER=locked_out_user
-SECRET_SAUCE=your_password
-INVALID_PASSWORD=invalid_password
+STANDARD_USER=...
+LOCKED_OUT_USER=...
+SECRET_SAUCE=...
+INVALID_PASSWORD=...
 ```
 
-Обязательные значения проверяются при загрузке тестовых данных. Если переменная отсутствует, запуск завершится с понятной ошибкой.
+`.env` исключён из Git. Не добавляйте реальные логины и пароли в тестовые
+параметры, логи или репозиторий.
 
-`BASE_URL` необязателен: по умолчанию используется `https://www.saucedemo.com/`.
+## Локальный запуск
 
-Файл `.env` исключён из Git через `.gitignore`.
-
----
-
-## <p align="center">Установка и локальный запуск</p>
-
-Создание виртуального окружения:
+Нужны Python 3.11+ и установленный Chrome или Chromium.
 
 ```bash
 python -m venv .venv
-```
-
-Активация в Windows:
-
-```bash
-.venv\Scripts\activate
-```
-
-Активация в Linux или macOS:
-
-```bash
 source .venv/bin/activate
-```
-
-Установка зависимостей:
-
-```bash
 pip install -r requirements.txt
-```
-
-Запуск всех тестов:
-
-```bash
 pytest
 ```
 
-Параллельный запуск:
+Для Windows PowerShell активация окружения:
 
-```bash
-pytest -n 2
+```powershell
+.venv\Scripts\Activate.ps1
 ```
 
-Запуск отдельного файла:
-
-```bash
-pytest tests/test_login_page.py
-```
-
-Тесты запускают Chrome в headless-режиме. Локально Selenium использует установленный ChromeDriver или Selenium Manager. В Docker пути к Chromium и ChromeDriver передаются через переменные окружения.
-
----
-
-## <p align="center">Маркеры тестов</p>
-
-| Маркер | Назначение |
-|---|---|
-| `smoke` | Критические проверки основного пользовательского пути |
-| `regression` | Полный регрессионный набор |
-| `negative` | Проверки валидации и ошибочных сценариев |
-| `e2e` | Полные пользовательские цепочки оформления заказа |
-
-Запуск наборов локально:
+Запуск отдельных наборов:
 
 ```bash
 pytest -m smoke
@@ -170,25 +120,21 @@ pytest -m negative
 pytest -m e2e
 ```
 
-Маркеры могут пересекаться. Например, основной E2E-сценарий одновременно входит в `e2e`, `regression` и `smoke`.
+Параллельный запуск:
 
----
+```bash
+pytest -n 4
+pytest -n auto
+```
 
-## <p align="center">Запуск через Docker</p>
-
-Сборка образа:
+## Запуск в Docker
 
 ```bash
 docker compose build
-```
-
-Запуск всех тестов:
-
-```bash
 docker compose run --rm all
 ```
 
-Запуск отдельных наборов тестов через одноимённые Docker Compose-сервисы:
+Другие наборы:
 
 ```bash
 docker compose run --rm smoke
@@ -197,129 +143,90 @@ docker compose run --rm negative
 docker compose run --rm e2e
 ```
 
-Количество параллельных worker-процессов можно задать через `.env` или при запуске:
+Изменить число workers можно без редактирования файлов:
 
 ```bash
-PYTEST_WORKERS=4 docker compose run --rm all
+docker compose run --rm -e PYTEST_WORKERS=4 regression
 ```
 
-Для Windows PowerShell:
+Chromium и ChromeDriver уже установлены внутри образа. Исходники, логи и
+`allure-results` пробрасываются в рабочую директорию проекта.
 
-```powershell
-$env:PYTEST_WORKERS=4
-docker compose run --rm all
-```
+## Allure Report локально
 
----
-
-## <p align="center">Allure Report</p>
-
-Создание результатов:
+Для локального HTML-отчёта нужны Java и Allure CLI:
 
 ```bash
 pytest --alluredir=allure-results --clean-alluredir
-```
-
-Просмотр интерактивного отчёта:
-
-```bash
 allure serve allure-results
 ```
 
-Создание статического отчёта:
+При падении теста фреймворк прикрепляет скриншот к Allure, если WebDriver уже
+создан. Имя вложения содержит фазу теста и номер worker.
 
-```bash
-allure generate allure-results -o allure-report --clean
-```
+## Логи
 
-При падении теста `conftest.py` пытается сделать скриншот браузера и прикрепить его к Allure. Ошибка при создании скриншота не заменяет исходную ошибку теста.
-
----
-
-## <p align="center">Логирование</p>
-
-Pytest выводит логи в терминал и сохраняет их в:
+При обычном запуске создаётся:
 
 ```text
-logs/ui-tests.log
+logs/ui-tests-main.log
 ```
 
-Папка `logs/` создаётся перед Docker-запуском и исключена из Git.
-
----
-
-## <p align="center">GitHub Actions CI</p>
-
-Workflow расположен в:
+При `pytest-xdist` каждый worker пишет отдельно:
 
 ```text
-.github/workflows/ui-tests.yml
+logs/ui-tests-gw0.log
+logs/ui-tests-gw1.log
 ```
 
-Запуск выполняется вручную через вкладку **Actions**. Перед стартом можно выбрать:
+Это исключает перемешивание строк из параллельных тестов. DEBUG-логи Selenium и
+urllib3 отключены, потому что они могут содержать payload команды ввода.
 
-- `all`;
-- `smoke`;
-- `regression`;
-- `negative`;
-- `e2e`;
-- количество worker-процессов Pytest-xdist.
+## GitHub Actions
 
-В GitHub необходимо создать Repository Secrets:
+Workflow запускается вручную на вкладке **Actions → UI Tests → Run workflow**.
+Перед запуском можно выбрать suite и число workers.
+
+Добавьте в **Settings → Secrets and variables → Actions**:
+
+- `STANDARD_USER`
+- `LOCKED_OUT_USER`
+- `SECRET_SAUCE`
+- `INVALID_PASSWORD`
+
+В **Settings → Pages → Build and deployment** выберите:
 
 ```text
-STANDARD_USER
-LOCKED_OUT_USER
-SECRET_SAUCE
-INVALID_PASSWORD
+Source: GitHub Actions
 ```
 
 Workflow:
 
 1. собирает Docker-образ;
-2. запускает выбранный набор тестов;
-3. сохраняет `allure-results` и логи как artifacts;
-4. восстанавливает историю предыдущих Allure-запусков;
-5. генерирует отчёт;
-6. публикует его в ветку `gh-pages`;
-7. возвращает ошибочный статус, если тесты не прошли.
+2. запускает выбранный suite;
+3. сохраняет логи как artifact;
+4. формирует обычный отчёт для history;
+5. формирует одностраничный отчёт для GitHub Pages;
+6. публикует отчёт официальным GitHub Pages deployment;
+7. сохраняет тренды в отдельной ветке `allure-history`;
+8. возвращает failed-статус, если тесты упали.
 
-Онлайн-отчёт проекта:
+Актуальный отчёт:
 
-```text
-https://kenig88.github.io/saucedemo_test_ui/
-```
+<https://kenig88.github.io/test_selenium_saucedemo/>
 
-История запусков доступна в Allure:
+На сайте всегда отображается последний завершённый запуск. История нужна только
+для графика тренда и не смешивает тесты разных запусков в одном отчёте.
 
-```text
-Graphs → Trend
-```
+## Основные решения
 
----
+- Page Object хранит локаторы и действия, тесты — проверки и сценарии.
+- Явные ожидания используются вместо `sleep`.
+- Счётчик корзины ожидает конкретное значение, поэтому корректно работает с
+  несколькими товарами.
+- Данные авторизации читаются только из окружения.
+- В Allure-параметры передаются безопасные имена кейсов, а не credentials.
+- Один WebDriver создаётся на один тест и всегда закрывается в fixture teardown.
 
-## <p align="center">Надёжность тестов</p>
-
-В проекте используются:
-
-- явные ожидания Selenium вместо `time.sleep()`;
-- отдельный WebDriver для каждого теста;
-- гарантированное закрытие браузера через `try/finally`;
-- ожидание обновления корзины после добавления и удаления товара;
-- ожидание удаления товара из DOM;
-- ожидание изменения списка цен после сортировки;
-- скриншот при падении теста;
-- параллельный запуск через Pytest-xdist.
-
----
-
-## <p align="center">Что демонстрирует проект</p>
-
-- построение UI test automation framework;
-- Page Object Model;
-- работу с Selenium WebDriver и явными ожиданиями;
-- управление тестовыми состояниями через Pytest fixtures;
-- позитивные, негативные, smoke, regression и E2E-проверки;
-- Allure-отчётность;
-- контейнерный запуск;
-- CI/CD-интеграцию и публикацию отчётов в GitHub Pages.
+Проект намеренно остаётся компактным: без Selenium Grid, повторных запусков,
+browser matrix, видео и дополнительных инфраструктурных слоёв.

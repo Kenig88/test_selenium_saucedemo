@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
-from pages.base_page import BasePage
+
 from config.links import Links
+from pages.base_page import BasePage
 
 
 class ProductDetailsPage(BasePage):
@@ -19,8 +20,9 @@ class ProductDetailsPage(BasePage):
         return self.get_text(self.PRODUCT_TITLE)
 
     def add_to_cart(self) -> None:
+        previous_count = self.get_cart_count()
         self.click(self.ADD_TO_CART_BUTTON)
-        self.wait_for_elements_count(self.CART_BADGE, 1)
+        self.wait.until(lambda _: self.get_cart_count() == previous_count + 1)
 
     def get_cart_count(self) -> int:
         badges = self.find_all(self.CART_BADGE)

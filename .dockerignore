@@ -8,6 +8,7 @@ __pycache__
 .pytest_cache
 allure-results
 allure-report
+allure-report-history
 allure-history/
 /logs
 dist

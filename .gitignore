@@ -24,6 +24,7 @@ logs/
 # Allure artifacts
 allure-results/
 allure-report/
+allure-report-history/
 allure-history/
 
 # OS

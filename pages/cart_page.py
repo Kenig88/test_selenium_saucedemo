@@ -1,4 +1,5 @@
 from selenium.webdriver.common.by import By
+
 from config.links import Links
 from pages.base_page import BasePage
 
@@ -19,8 +20,10 @@ class CartPage(BasePage):
     def remove_from_cart(self, product_name: str) -> None:
         cart_item = (
             By.XPATH,
-            f"//div[contains(@class, 'cart_item')]"
-            f"[.//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']]"
+            (
+                f"//div[contains(@class, 'cart_item')]"
+                f"[.//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']]"
+            ),
         )
         remove_button = (By.XPATH, f"{cart_item[1]}//button")
         self.click(remove_button)

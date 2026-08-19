@@ -1,4 +1,5 @@
 from selenium.webdriver.common.by import By
+
 from config.links import Links
 from pages.base_page import BasePage
 

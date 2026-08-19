@@ -1,4 +1,5 @@
 from selenium.webdriver.common.by import By
+
 from config.links import Links
 from pages.base_page import BasePage
 
@@ -27,7 +28,9 @@ class CheckoutInfoPage(BasePage):
     def enter_postal_code(self, postal_code: str) -> None:
         self.enter_text(self.POSTAL_CODE_INPUT, postal_code)
 
-    def enter_checkout_form(self, first_name: str, last_name: str, postal_code: str) -> None:
+    def enter_checkout_form(
+        self, first_name: str, last_name: str, postal_code: str
+    ) -> None:
         self.enter_first_name(first_name)
         self.enter_last_name(last_name)
         self.enter_postal_code(postal_code)

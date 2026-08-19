@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
+
 from config.links import Links
 from pages.base_page import BasePage
 
@@ -19,29 +20,35 @@ class ProductsPage(BasePage):
         return self.assert_page_opened("inventory.html", self.TITLE)
 
     def add_to_cart(self, product_name: str) -> None:
+        previous_count = self.get_cart_count()
         locator = (
             By.XPATH,
-            f"//div[contains(@class, 'inventory_item')]"
-            f"[.//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']]"
-            f"//button[normalize-space()='Add to cart']"
+            (
+                f"//div[contains(@class, 'inventory_item')]"
+                f"[.//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']]"
+                f"//button[normalize-space()='Add to cart']"
+            ),
         )
         self.click(locator)
-        self.wait_for_elements_count(self.CART_BADGE, 1)
+        self.wait_for_cart_count(previous_count + 1)
 
     def remove_from_cart(self, product_name: str) -> None:
+        previous_count = self.get_cart_count()
         locator = (
             By.XPATH,
-            f"//div[contains(@class, 'inventory_item')]"
-            f"[.//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']]"
-            f"//button[normalize-space()='Remove']"
+            (
+                f"//div[contains(@class, 'inventory_item')]"
+                f"[.//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']]"
+                f"//button[normalize-space()='Remove']"
+            ),
         )
         self.click(locator)
-        self.wait_for_element_absent(self.CART_BADGE)
+        self.wait_for_cart_count(max(previous_count - 1, 0))
 
     def open_product_details(self, product_name: str) -> None:
         locator = (
             By.XPATH,
-            f"//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']"
+            f"//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']",
         )
         self.click(locator)
 
@@ -60,8 +67,10 @@ class ProductsPage(BasePage):
         badges = self.find_all(self.CART_BADGE)
         return int(badges[0].text) if badges else 0
 
+    def wait_for_cart_count(self, expected_count: int) -> None:
+        self.wait.until(lambda _: self.get_cart_count() == expected_count)
+
     def get_prices(self) -> list[float]:
         return [
-            float(price.text.replace("$", ""))
-            for price in self.find_all(self.PRICE)
+            float(price.text.replace("$", "")) for price in self.find_all(self.PRICE)
         ]

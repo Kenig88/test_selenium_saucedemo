@@ -1,10 +1,9 @@
 import logging
-from typing import Tuple
 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-Locator = Tuple[str, str]
+Locator = tuple[str, str]
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +14,6 @@ class BasePage:
         self.url = url
         self.wait = WebDriverWait(driver, timeout)
 
-
     # --- Navigation (навигация по страницам) ---
 
     def open(self) -> None:
@@ -25,7 +23,6 @@ class BasePage:
         """
         logger.info("Open page: %s", self.url)
         self.driver.get(self.url)
-
 
     # --- Page state (проверка состояния страницы) ---
 
@@ -44,11 +41,12 @@ class BasePage:
 
         logger.debug("Current URL: %s", current_url)
 
-        assert url_part in current_url, f"Ожидал '{url_part}' в URL, получил '{current_url}'."
+        assert url_part in current_url, (
+            f"Ожидал '{url_part}' в URL, получил '{current_url}'."
+        )
 
         logger.info("Page opened successfully. Title text: %s", element.text)
         return element.text
-
 
     # --- Find elements (поиск элементов) ---
 
@@ -80,7 +78,6 @@ class BasePage:
             lambda driver: len(driver.find_elements(*locator)) == expected_count
         )
 
-
     # --- Actions (действия пользователя) ---
 
     def click(self, locator: Locator) -> None:
@@ -106,7 +103,6 @@ class BasePage:
             element.clear()
 
         element.send_keys(text)
-
 
     # --- Get config (получение данных из UI) ---
 

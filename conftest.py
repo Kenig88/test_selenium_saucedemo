@@ -1,5 +1,6 @@
 import logging
 import os
+from pathlib import Path
 
 import allure
 import pytest
@@ -19,6 +20,20 @@ from pages.product_details_page import ProductDetailsPage
 from pages.products_page import ProductsPage
 
 logger = logging.getLogger(__name__)
+PROJECT_ROOT = Path(__file__).resolve().parent
+LOGS_DIR = PROJECT_ROOT / "logs"
+
+
+@pytest.hookimpl(tryfirst=True)
+def pytest_configure(config):
+    """Создаёт отдельный лог для каждого xdist worker."""
+    LOGS_DIR.mkdir(exist_ok=True)
+    worker_id = os.getenv("PYTEST_XDIST_WORKER", "main")
+    config.option.log_file = str(LOGS_DIR / f"ui-tests-{worker_id}.log")
+
+    # Selenium DEBUG-логи содержат payload команды send_keys, включая пароль.
+    logging.getLogger("selenium").setLevel(logging.WARNING)
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 
 # Прикрепляет скриншот к Allure при падении теста
@@ -27,17 +42,17 @@ def pytest_runtest_makereport(item):
     outcome = yield
     report = outcome.get_result()
 
-    if report.when == "call" and report.failed:
+    if report.failed:
         driver = item.funcargs.get("browser_fixture")
         if driver:
-            worker_id = "master"
+            worker_id = "main"
             if hasattr(item.config, "workerinput"):
                 worker_id = item.config.workerinput.get("workerid", "worker")
 
             try:
                 allure.attach(
                     driver.get_screenshot_as_png(),
-                    name=f"failed-{worker_id}",
+                    name=f"failed-{report.when}-{worker_id}",
                     attachment_type=allure.attachment_type.PNG,
                 )
             except Exception:
@@ -122,11 +137,14 @@ def checkout_complete_page(browser_fixture):
 # Фикстуры действий
 # =========================
 
+
 # Выполняет логин пользователя
 @pytest.fixture()
 def logged_in_products_page(login_page, products_page):
     login_page.open()
-    login_page.user_input(username=Username.STANDARD_USER, password=Password.SECRET_SAUCE)
+    login_page.user_input(
+        username=Username.STANDARD_USER, password=Password.SECRET_SAUCE
+    )
     return products_page
 
 
@@ -164,6 +182,8 @@ def opened_checkout_overview_page(opened_checkout_info_page, checkout_overview_p
 
 # Открывает страницу успешного завершения заказа
 @pytest.fixture()
-def opened_checkout_complete_page(opened_checkout_overview_page, checkout_complete_page):
+def opened_checkout_complete_page(
+    opened_checkout_overview_page, checkout_complete_page
+):
     opened_checkout_overview_page.click_finish()
     return checkout_complete_page

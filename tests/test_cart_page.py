@@ -1,5 +1,5 @@
-import pytest
 import allure
+import pytest
 
 from config.products_data import ProductNames
 
@@ -7,7 +7,6 @@ from config.products_data import ProductNames
 @allure.feature("Cart")
 @pytest.mark.regression
 class TestCartPage:
-
     @allure.story("Отображение товара в корзине")
     @allure.title("Пользователь видит добавленный товар в корзине")
     @allure.severity(allure.severity_level.CRITICAL)
@@ -28,15 +27,23 @@ class TestCartPage:
     @allure.story("Переход в checkout")
     @allure.title("Пользователь может перейти к оформлению заказа")
     @allure.severity(allure.severity_level.CRITICAL)
-    def test_user_can_go_to_checkout_from_cart(self, cart_page_with_product, checkout_info_page):
+    def test_user_can_go_to_checkout_from_cart(
+        self, cart_page_with_product, checkout_info_page
+    ):
         page = cart_page_with_product(ProductNames.BACKPACK)
         page.click_checkout()
-        assert checkout_info_page.is_opened() == "Checkout: Your Information", "Страница CheckoutInfoPage не открылась"
+        assert checkout_info_page.is_opened() == "Checkout: Your Information", (
+            "Страница CheckoutInfoPage не открылась"
+        )
 
     @allure.story("Возврат к товарам")
     @allure.title("Пользователь может вернуться к списку товаров")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_user_can_return_to_products_from_cart(self, cart_page_with_product, products_page):
+    def test_user_can_return_to_products_from_cart(
+        self, cart_page_with_product, products_page
+    ):
         page = cart_page_with_product(ProductNames.RED_TSHIRT)
         page.click_continue_shopping()
-        assert products_page.is_opened() == "Products", "Страница ProductsPage не открылась"
+        assert products_page.is_opened() == "Products", (
+            "Страница ProductsPage не открылась"
+        )

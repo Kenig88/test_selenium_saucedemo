@@ -35,4 +35,4 @@ COPY . .
 
 RUN mkdir -p logs allure-results
 
-CMD ["pytest", "-n", "2", "--alluredir=allure-results", "--clean-alluredir"]
+CMD ["sh", "-c", "pytest -n ${PYTEST_WORKERS:-2} --alluredir=allure-results --clean-alluredir"]
