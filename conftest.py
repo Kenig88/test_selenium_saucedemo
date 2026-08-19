@@ -66,10 +66,12 @@ def browser_fixture():
     options.add_argument("--incognito")
     options.add_argument("--window-size=1920,1080")
 
-    # Для Docker и CI
+    # Для Docker, CI и стабильной работы на Windows
     options.add_argument("--headless=new")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--remote-allow-origins=*")
 
     chrome_bin = os.getenv("CHROME_BIN")
     chromedriver_path = os.getenv("CHROMEDRIVER_PATH")
